@@ -1,5 +1,5 @@
 import Foundation
-import onnxruntime_objc
+import OnnxRuntimeBindings
 
 /// Two-session pipeline: raw audio -> frontend.onnx -> features -> model_int8.onnx -> logits.
 /// The frontend ONNX bakes the Kaldi-fbank feature extraction, so the app never does DSP.
