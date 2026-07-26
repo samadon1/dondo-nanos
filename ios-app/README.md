@@ -4,6 +4,12 @@ A minimal SwiftUI app that runs Nano-L12 on-device with ONNX Runtime. On first l
 downloads two ONNX files from the HuggingFace repo into Documents, then transcribes recorded
 audio locally. No feature-extraction code lives in the app.
 
+<p align="center">
+  <img src="demo.png" width="300" alt="DONDO-nano transcribing Twi on an iPhone, fully on-device">
+</p>
+
+<p align="center"><sub>Transcribing Twi on-device (no network after the one-time model download).</sub></p>
+
 ## How it works
 
 ```
