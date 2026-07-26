@@ -50,12 +50,3 @@ and add `NSMicrophoneUsageDescription` to Info.plist.
 Note: this is a scaffold. Depending on the ONNX Runtime package version, the import
 (`onnxruntime_objc`) or a couple of `ORTValue`/`ORTSession` call signatures in `Transcriber.swift`
 may need a minor adjustment against the installed API.
-
-## Status
-
-- [x] Model download + cache from the Hub (frontend + int8 transformer)
-- [x] Feature extraction baked into `frontend.onnx` (no Swift DSP)
-- [x] ONNX Runtime two-session pipeline + greedy CTC decode
-- [x] Audio capture
-- [ ] On-device latency measurement on a real iPhone
-- [ ] Core ML backend for the Neural Engine (optional, for battery/speed)
