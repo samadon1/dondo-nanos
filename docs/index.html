@@ -1,3 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Post-training compression of Khaya AI's DONDO speech model for on-device ASR in Twi and Ewe.">
+<meta property="og:title" content="DONDO-nanos: Post-training compression of Khaya AI's DONDO for on-device ASR">
+<meta property="og:type" content="article">
 <title>DONDO-nanos</title>
 <style>
   :root{
@@ -40,6 +49,16 @@
     radial-gradient(130% 90% at 88% -15%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 58%),
     radial-gradient(95% 75% at -5% 0%,color-mix(in srgb,var(--teal) 10%,transparent),transparent 55%)}
   .dek{font-family:var(--serif);font-weight:400;font-size:1.32rem;line-height:1.5;color:var(--ink-soft);margin:1.2rem 0 0;max-width:42rem}
+  .reslinks{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.6rem 0 0}
+  .reslink{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--sans);font-size:.9rem;
+    font-weight:600;color:var(--ink);text-decoration:none;padding:.5rem .95rem;border-radius:999px;
+    border:1px solid var(--line);background:var(--card);transition:border-color .12s,transform .12s}
+  .reslink:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .reslink svg{width:16px;height:16px;fill:currentColor;flex:none}
+  .reslink.soon{color:var(--muted);border-style:dashed;cursor:default}
+  .reslink.soon:hover{border-color:var(--line);transform:none}
+  .reslink.soon .tag{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.02em;
+    padding:.08rem .4rem;border-radius:999px;background:color-mix(in srgb,var(--muted) 16%,transparent)}
   .byline{font-family:var(--sans);font-size:.75rem;color:var(--muted);margin-top:1.5rem;letter-spacing:.04em;
     display:flex;gap:.55rem;flex-wrap:wrap;align-items:center}
   .dot{width:3px;height:3px;border-radius:50%;background:var(--muted);display:inline-block}
@@ -130,13 +149,22 @@
   .axlbl{font-family:var(--sans);font-size:14px;font-weight:600;fill:var(--ink-soft)}
   .pl{font-family:var(--sans);font-size:13px;fill:var(--ink)}
 </style>
+</head>
+<body>
+
 
 <header class="hero">
   <div class="col">
-    <h1>Shrinking African-language speech recognition to fit on a phone</h1>
+    <h1>DONDO-nanos: Post-training compression of Khaya AI's DONDO for on-device ASR</h1>
     <p class="dek">Khaya AI's DONDO is the best open speech model I've found for Twi and Ewe, but at
       1.2&nbsp;GB it's too large for the phones where it would be most useful. This post walks through
-      compressing it to run on-device, measurements and dead ends included.</p>
+      compressing it to run on-device, with the numbers at each step and the approaches that didn't work.</p>
+    <div class="reslinks">
+      <a class="reslink" href="https://huggingface.co/samwell/dondo-nano-twi-ewe" target="_blank" rel="noopener">🤗 Models</a>
+      <a class="reslink" href="https://github.com/samadon1/dondo-nanos" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> Code</a>
+      <a class="reslink" href="https://github.com/samadon1/dondo-nanos/tree/master/ios-app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25Z"/></svg> iOS app</a>
+      <span class="reslink soon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zM15.53 2.16l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0s-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg> Android <span class="tag">Coming soon</span></span>
+    </div>
   </div>
 </header>
 
@@ -320,8 +348,8 @@
     <div class="eyebrow">The comparison</div>
     <h2>A fair upper bound</h2>
     <p>The students trained on WAXAL, but the parent I compared against was zero-shot, which isn't fair.
-      So I trained the full 24-layer parent on the same data (CTC, no distillation). Now the rows compare
-      like for like.</p>
+      So I trained the full 24-layer parent on the same data (CTC, no distillation). Now it's an
+      apples-to-apples comparison.</p>
     <div class="tbl-scroll">
       <table><caption>All trained on the same WAXAL Twi/Ewe data, CTC</caption>
         <thead><tr><th>Model</th><th>Params</th><th>Disk fp32</th><th>CPU RTF</th><th>Blended</th><th>vs full</th></tr></thead>
@@ -408,15 +436,12 @@
   <section><div class="col">
     <div class="eyebrow">Prior work</div>
     <h2>Is any of this new?</h2>
-    <p>Not the method. Warm-starting a smaller student from a subset of a bigger model's layers and
-      fine-tuning is the idea behind DistilBERT, and for speech, DistilHuBERT. Layer-pruning and
-      distilling wav2vec2-style models has been done many times. That a weak or out-of-domain teacher
-      makes distillation worse than plain fine-tuning is also known.</p>
-    <p>The contribution here is applied work: a measured size-accuracy curve for DONDO on Ghanaian
-      languages, a 319&nbsp;MB model that runs on a phone and still beats MMS-1b on Twi and Ewe, and two
-      failure modes pinned down for this architecture, that naive int8 is a no-op on a Conformer and that
-      an out-of-domain teacher drags distillation below plain fine-tuning. Both are easy to assume the
-      other way, so I measured them.</p>
+    <p>The method isn't new. Warm-starting a shallower student from a subset of a teacher's layers and
+      fine-tuning is the idea behind DistilBERT and, for speech, DistilHuBERT. What's here is the applied
+      result: a size-accuracy curve for DONDO on Ghanaian languages, a 319&nbsp;MB model that runs on a
+      phone and beats zero-shot MMS-1b on Twi and Ewe, and two documented failure modes, that naive int8
+      is a no-op on a Conformer and that an out-of-domain teacher makes distillation worse than plain
+      fine-tuning.</p>
   </div></section>
 
   <div class="recipe">
@@ -439,7 +464,5 @@
   </div></section>
 </main>
 
-<footer><div class="col">
-  <p>Open research log · DONDO-nanos. Parent model: Khaya AI DONDO (Wav2Vec2-BERT). Evaluation on
-    Google WAXAL validation, greedy CTC decode, normalized text.</p>
-</div></footer>
+</body>
+</html>
