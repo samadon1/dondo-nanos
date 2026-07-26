@@ -1,0 +1,34 @@
+# XcodeGen spec. Generate the project with:  brew install xcodegen && xcodegen generate
+name: DondoNano
+options:
+  bundleIdPrefix: com.dondonanos
+  deploymentTarget:
+    iOS: "16.0"
+packages:
+  onnxruntime:
+    url: https://github.com/microsoft/onnxruntime-swift-package-manager
+    from: "1.19.0"
+targets:
+  DondoNano:
+    type: application
+    platform: iOS
+    sources:
+      - path: DondoNano
+    dependencies:
+      - package: onnxruntime
+        product: onnxruntime
+    info:
+      path: DondoNano/Info.plist
+      properties:
+        CFBundleDisplayName: DONDO-nano
+        NSMicrophoneUsageDescription: DONDO-nano uses the microphone to transcribe your speech on-device.
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dondonanos.app
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "5.0"

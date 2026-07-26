@@ -22,13 +22,28 @@ file so quantization never touches the frontend.
 - **Recorder.swift** captures 16 kHz mono PCM.
 - **ContentView.swift** ties it together.
 
-## Setup
+## Build and run
 
-1. Open this folder in Xcode. Add the ONNX Runtime Swift package:
-   `https://github.com/microsoft/onnxruntime-swift-package-manager`
-2. (Optional) change the repo id in `ModelManager.swift`.
-3. Add `NSMicrophoneUsageDescription` to Info.plist. Build to a real device (the simulator has no
-   microphone).
+Fastest (uses the included `project.yml`):
+
+```bash
+brew install xcodegen        # once
+cd ios-app
+xcodegen generate           # creates DondoNano.xcodeproj (ONNX Runtime package + mic permission wired)
+open DondoNano.xcodeproj
+```
+
+Then in Xcode: select the **DondoNano** target → Signing & Capabilities → pick your Team (your
+Apple ID); choose your connected iPhone as the run destination; press Run. First launch downloads
+~320 MB of model files from the Hub, then transcription runs fully on-device.
+
+Manual alternative (no XcodeGen): create a new iOS App (SwiftUI) project, drag in the files under
+`DondoNano/`, add the Swift package `https://github.com/microsoft/onnxruntime-swift-package-manager`,
+and add `NSMicrophoneUsageDescription` to Info.plist.
+
+Note: this is a scaffold. Depending on the ONNX Runtime package version, the import
+(`onnxruntime_objc`) or a couple of `ORTValue`/`ORTSession` call signatures in `Transcriber.swift`
+may need a minor adjustment against the installed API.
 
 ## Status
 
