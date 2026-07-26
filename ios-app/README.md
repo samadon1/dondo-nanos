@@ -47,6 +47,6 @@ Manual alternative (no XcodeGen): create a new iOS App (SwiftUI) project, drag i
 `DondoNano/`, add the Swift package `https://github.com/microsoft/onnxruntime-swift-package-manager`,
 and add `NSMicrophoneUsageDescription` to Info.plist.
 
-Note: this is a scaffold. Depending on the ONNX Runtime package version, the import
-(`onnxruntime_objc`) or a couple of `ORTValue`/`ORTSession` call signatures in `Transcriber.swift`
-may need a minor adjustment against the installed API.
+Note: the ONNX Runtime SPM package exposes its module as `OnnxRuntimeBindings` (that is what
+`Transcriber.swift` imports; `onnxruntime_objc` is the CocoaPods name). Built and run on a real
+iPhone with the version pinned in `project.yml`.
