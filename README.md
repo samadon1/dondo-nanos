@@ -8,7 +8,7 @@ version is a 605.8M-parameter Wav2Vec2-BERT Conformer, about 1.2 GB in half prec
 too big for a mid-range phone, which is where it would get used. This repo compresses it and
 measures every step.
 
-- **Blog:** https://samadon1.github.io/dondo-nanos/ (the full story, with charts and audio)
+- **Blog:** https://samadon1.github.io/dondo-nanos/
 - **Models:** https://huggingface.co/samwell/dondo-nano-twi-ewe
 
 ## Results
