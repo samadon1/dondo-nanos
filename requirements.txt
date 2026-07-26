@@ -1,0 +1,8 @@
+# Local driver deps (the actual jobs run on Modal; see scripts/dondo_nanos/infra.py
+# for the remote image). Install these to launch runs:
+modal>=0.64
+huggingface_hub>=0.24
+
+# The remote Modal image installs the compute stack (torch, transformers==4.56.0,
+# jiwer, librosa, soundfile, pandas, pyarrow, onnx, onnxruntime, onnxscript).
+# You do not need those locally.

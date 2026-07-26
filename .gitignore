@@ -1,0 +1,28 @@
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# models / data / results (large or reproducible)
+*.safetensors
+*.onnx
+*.onnx.data
+*.npy
+*.tar
+*.parquet
+results/
+models/
+*.log
+docs/RESULTS.md
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/
+
+# ios
+ios-app/**/build/
+ios-app/**/*.xcuserstate
+ios-app/**/DerivedData/
